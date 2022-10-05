@@ -1,0 +1,8 @@
+telegram:
+  api-url: https://api.telegram.org/
+  bot:
+    username: @BotName
+    token: token
+    webhookPath: webhook
+server:
+  port: 80

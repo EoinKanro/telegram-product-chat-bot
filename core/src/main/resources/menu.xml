@@ -1,0 +1,56 @@
+<?xml version="1.0"?>
+<Menu>
+  <Keyboards>
+    <Keyboard link="Main">
+      <RowList>
+        <Row>
+          <ButtonList>
+            <Button>Answer</Button>
+          </ButtonList>
+        </Row>
+        <Row>
+          <ButtonList>
+            <Button>keyboard2</Button>
+          </ButtonList>
+        </Row>
+      </RowList>
+    </Keyboard>
+    <Keyboard link="keyboard2">
+      <RowList>
+        <Row>
+          <ButtonList>
+            <Button>Text2</Button>
+            <Button>keyboard3</Button>
+          </ButtonList>
+        </Row>
+        <Row>
+          <ButtonList>
+            <Button>Main</Button>
+          </ButtonList>
+        </Row>
+      </RowList>
+    </Keyboard>
+    <Keyboard link="keyboard3">
+      <RowList>
+        <Row>
+          <ButtonList>
+            <Button>Text3</Button>
+          </ButtonList>
+        </Row>
+        <Row>
+          <ButtonList>
+            <Button>Main</Button>
+          </ButtonList>
+        </Row>
+      </RowList>
+    </Keyboard>
+  </Keyboards>
+
+  <Answers>
+    <Answer link="Answer">
+      SOme answer text
+Next line
+Next line
+    </Answer>
+  </Answers>
+</Menu>
