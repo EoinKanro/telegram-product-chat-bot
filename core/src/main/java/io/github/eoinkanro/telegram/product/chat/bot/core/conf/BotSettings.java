@@ -17,4 +17,7 @@ public class BotSettings {
   @Value(value = "${telegram.bot.defaultAnswer:Choose element in menu}")
   private String defaultAnswer;
 
+  @Value(value = "${telegram.bot.backButton:Back}")
+  private String backButton;
+
 }

@@ -6,6 +6,7 @@ import io.github.eoinkanro.telegram.product.chat.bot.core.model.data.menu.Keyboa
 import io.github.eoinkanro.telegram.product.chat.bot.core.model.data.menu.Menu;
 import io.github.eoinkanro.telegram.product.chat.bot.core.model.data.menu.MenuMainBlock;
 import io.github.eoinkanro.telegram.product.chat.bot.core.model.data.menu.Row;
+import io.github.eoinkanro.telegram.product.chat.bot.core.model.data.info.KeyboardInfo;
 import io.github.eoinkanro.telegram.product.chat.bot.core.model.exception.ConfigException;
 import io.github.eoinkanro.telegram.product.chat.bot.core.utils.FileUtils;
 import java.io.File;
@@ -14,6 +15,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import javax.annotation.Nullable;
 import javax.annotation.PostConstruct;
 import javax.xml.bind.JAXBContext;
@@ -117,13 +119,18 @@ public class MenuConfig {
 
   @Nullable
   public List<KeyboardRow> getKeyboard(String link) {
-    return keyboards.get(link);
+    List<KeyboardRow> keyboard = keyboards.get(link);
+    if (keyboard != null) {
+      keyboard = new ArrayList<>(keyboard);
+    }
+    return keyboard;
   }
 
   @Nullable
-  public List<KeyboardRow> getFirstKeyboard() {
+  public KeyboardInfo getFirstKeyboard() {
     if (!keyboards.isEmpty()) {
-      return keyboards.entrySet().iterator().next().getValue();
+      Entry<String, List<KeyboardRow>> entry = keyboards.entrySet().iterator().next();
+      return new KeyboardInfo(entry.getKey(), entry.getValue());
     }
     return null;
   }
