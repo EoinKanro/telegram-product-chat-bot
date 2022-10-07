@@ -7,11 +7,12 @@ import lombok.Getter;
 
 @Getter
 @XmlRootElement(name = "Answer")
-public class Answer {
+public class Answer extends MenuMainBlock{
 
-  @XmlAttribute(name = "link")
-  private String link;
+  @XmlAttribute(name = "img")
+  private String img;
 
   @XmlValue
   private String text;
+
 }

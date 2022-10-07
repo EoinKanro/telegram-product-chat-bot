@@ -7,9 +7,10 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum ConfigPaths {
 
-  CONFIG_PATH("conf"),
-  MENU_FILE_NAME("menu.xml"),
-  CACHE("cache");
+  CONFIG_FOLDER("conf"),
+  CACHE_FOLDER("cache"),
+  IMAGE_FOLDER("img"),
+  MENU_FILE("menu.xml");
 
   private final String path;
 }
