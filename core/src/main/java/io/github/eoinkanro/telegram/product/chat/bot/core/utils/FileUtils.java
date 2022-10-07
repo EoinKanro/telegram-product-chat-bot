@@ -14,7 +14,17 @@ public class FileUtils {
   public File getConfFile(String fileName) {
     return new File(getCurrentPath()
         + File.separator
-        + ConfigPaths.CONFIG_PATH.getPath()
+        + ConfigPaths.CONFIG_FOLDER.getPath()
+        + File.separator
+        + fileName);
+  }
+
+  public File getImage(String fileName) {
+    return new File(getCurrentPath()
+        + File.separator
+        + ConfigPaths.CONFIG_FOLDER.getPath()
+        + File.separator
+        + ConfigPaths.IMAGE_FOLDER.getPath()
         + File.separator
         + fileName);
   }

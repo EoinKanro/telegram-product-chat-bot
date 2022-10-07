@@ -44,7 +44,7 @@ public class CacheConfig {
         .build();
 
     PersistentCacheManager persistentCacheManager = CacheManagerBuilder.newCacheManagerBuilder()
-        .with(CacheManagerBuilder.persistence(fileUtils.getConfFile(ConfigPaths.CACHE.getPath())))
+        .with(CacheManagerBuilder.persistence(fileUtils.getConfFile(ConfigPaths.CACHE_FOLDER.getPath())))
         .withCache(UserKeyboardService.CACHE_NAME, cacheConfig)
         .build(false);
 

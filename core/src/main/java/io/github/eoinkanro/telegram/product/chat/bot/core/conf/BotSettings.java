@@ -14,10 +14,7 @@ public class BotSettings {
   @Value("${telegram.bot.token}")
   private String token;
 
-  @Value("${telegram.bot.webhookPath}")
-  private String webhookPath;
-
-  @Value(value = "${telegram.bot.defaultAnswer:Menu}")
+  @Value(value = "${telegram.bot.defaultAnswer:Choose element in menu}")
   private String defaultAnswer;
 
 }
