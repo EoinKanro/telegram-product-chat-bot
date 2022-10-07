@@ -1,17 +1,20 @@
 package io.github.eoinkanro.telegram.product.chat.bot.core.conf;
 
-import lombok.Getter;
+import io.github.eoinkanro.telegram.product.chat.bot.core.model.exception.ConfigException;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.telegram.telegrambots.meta.api.methods.updates.SetWebhook;
+import org.telegram.telegrambots.meta.TelegramBotsApi;
+import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
 
-@Getter
 @Configuration
 public class BotConfig {
 
   @Bean
-  public SetWebhook setWebhookBean(BotSettings botSettings) {
-    return SetWebhook.builder().url(botSettings.getWebhookPath()).build();
+  public TelegramBotsApi telegramBotsApi() throws ConfigException {
+    try {
+      return new TelegramBotsApi(DefaultBotSession.class);
+    } catch (Exception e) {
+      throw new ConfigException("Error while starting bot");
+    }
   }
-
 }
