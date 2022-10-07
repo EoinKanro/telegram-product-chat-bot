@@ -2,10 +2,12 @@ package io.github.eoinkanro.telegram.product.chat.bot.core.api;
 
 import io.github.eoinkanro.telegram.product.chat.bot.core.conf.BotSettings;
 import io.github.eoinkanro.telegram.product.chat.bot.core.conf.MenuConfig;
-import io.github.eoinkanro.telegram.product.chat.bot.core.model.data.cache.UserKeyboard;
+import io.github.eoinkanro.telegram.product.chat.bot.core.model.data.cache.UserKeyboardInfo;
+import io.github.eoinkanro.telegram.product.chat.bot.core.model.data.info.KeyboardInfo;
 import io.github.eoinkanro.telegram.product.chat.bot.core.service.UserKeyboardService;
 import io.github.eoinkanro.telegram.product.chat.bot.core.utils.FileUtils;
 import java.io.File;
+import java.util.Collections;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import lombok.Getter;
@@ -21,6 +23,7 @@ import org.telegram.telegrambots.meta.api.objects.InputFile;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardButton;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
@@ -32,8 +35,9 @@ public class ProductChatBot extends TelegramLongPollingBot {
   private final String botUsername;
   @Getter(onMethod_ = {@Override})
   private final String botToken;
-  private final String defaultAnswer;
 
+  @Autowired
+  private BotSettings botSettings;
   @Autowired
   private MenuConfig menuConfig;
   @Autowired
@@ -43,15 +47,25 @@ public class ProductChatBot extends TelegramLongPollingBot {
   @Autowired
   private FileUtils fileUtils;
 
+  private String mainKeyboard;
+
   public ProductChatBot(BotSettings botSettings) {
     this.botUsername = botSettings.getUsername();
     this.botToken = botSettings.getToken();
-    this.defaultAnswer = botSettings.getDefaultAnswer();
   }
 
   @PostConstruct
   private void init() throws TelegramApiException {
     telegramBotsApi.registerBot(this);
+
+    if (menuConfig.getKeyboard(MenuConfig.START) != null) {
+      mainKeyboard = MenuConfig.START;
+    } else {
+      KeyboardInfo keyboardInfo = menuConfig.getFirstKeyboard();
+      if (keyboardInfo != null) {
+        mainKeyboard = keyboardInfo.getName();
+      }
+    }
   }
 
   @Override
@@ -82,25 +96,29 @@ public class ProductChatBot extends TelegramLongPollingBot {
   }
 
   private ReplyKeyboardMarkup getSendKeyboard(String chatId, String messageText) {
-    UserKeyboard currentKeyboardCache = userKeyboardService.findCurrentKeyboard(chatId);
-    List<KeyboardRow> currentKeyboard = getCurrentKeyboard(currentKeyboardCache);
+    UserKeyboardInfo userKeyboardInfo = userKeyboardService.findUserKeyboardInfo(chatId);
+    KeyboardInfo currentKeyboard = getCurrentOrDefaultKeyboard(userKeyboardInfo);
+    List<KeyboardRow> sendKeyboard;
 
-    List<KeyboardRow> keyboard = null;
-    if (messageText != null && !messageText.isEmpty()) {
-      keyboard = menuConfig.getKeyboard(messageText);
+    if (botSettings.getBackButton().equals(messageText) && !userKeyboardInfo.getPreviousKeyboards().isEmpty()) {
+      sendKeyboard = getPreviousKeyboard(userKeyboardInfo);
+    } else {
+      sendKeyboard = getNextKeyboard(userKeyboardInfo, messageText, currentKeyboard);
+
+      if (sendKeyboard == null && currentKeyboard != null){
+        sendKeyboard = currentKeyboard.getKeyboard();
+      }
     }
 
     ReplyKeyboardMarkup replyKeyboardMarkup = null;
-    if (keyboard != null) {
-      currentKeyboardCache.setKeyboardLink(messageText);
-      userKeyboardService.updateCurrentKeyboard(currentKeyboardCache);
-    } else {
-      keyboard = currentKeyboard;
-    }
+    if (sendKeyboard != null) {
+      if (!userKeyboardInfo.getPreviousKeyboards().isEmpty()) {
+        sendKeyboard.add(new KeyboardRow(
+            Collections.singleton(new KeyboardButton(botSettings.getBackButton()))));
+      }
 
-    if (keyboard != null) {
       replyKeyboardMarkup = new ReplyKeyboardMarkup();
-      replyKeyboardMarkup.setKeyboard(keyboard);
+      replyKeyboardMarkup.setKeyboard(sendKeyboard);
       replyKeyboardMarkup.setSelective(true);
       replyKeyboardMarkup.setResizeKeyboard(true);
       replyKeyboardMarkup.setOneTimeKeyboard(false);
@@ -108,18 +126,48 @@ public class ProductChatBot extends TelegramLongPollingBot {
     return replyKeyboardMarkup;
   }
 
-  private List<KeyboardRow> getCurrentKeyboard(UserKeyboard currentKeyboardCache) {
+  private KeyboardInfo getCurrentOrDefaultKeyboard(UserKeyboardInfo userKeyboardInfo) {
     List<KeyboardRow> currentKeyboard = null;
-    if (currentKeyboardCache.getKeyboardLink() != null) {
-      currentKeyboard = menuConfig.getKeyboard(currentKeyboardCache.getKeyboardLink());
+    String keyboardName = null;
+
+    if (userKeyboardInfo.getCurrentKeyboard() != null) {
+      keyboardName = userKeyboardInfo.getCurrentKeyboard();
+      currentKeyboard = menuConfig.getKeyboard(userKeyboardInfo.getCurrentKeyboard());
+    }else if (mainKeyboard != null) {
+      keyboardName = mainKeyboard;
+      currentKeyboard = menuConfig.getKeyboard(mainKeyboard);
     }
-    if (currentKeyboard == null) {
-      currentKeyboard = menuConfig.getKeyboard(MenuConfig.START);
+
+    if (currentKeyboard != null) {
+      return new KeyboardInfo(keyboardName, currentKeyboard);
+    } else {
+      return null;
     }
-    if (currentKeyboard == null) {
-      currentKeyboard = menuConfig.getFirstKeyboard();
+  }
+
+  private List<KeyboardRow> getPreviousKeyboard(UserKeyboardInfo userKeyboardInfo) {
+    String previousKeyboard = userKeyboardInfo.getPreviousKeyboards().pollLast();
+    userKeyboardInfo.setCurrentKeyboard(previousKeyboard);
+    userKeyboardService.updateUserKeyboardInfo(userKeyboardInfo);
+    return menuConfig.getKeyboard(previousKeyboard);
+  }
+
+  private List<KeyboardRow> getNextKeyboard(UserKeyboardInfo userKeyboardInfo, String messageText, KeyboardInfo currentKeyboard) {
+    List<KeyboardRow> nextKeyboard = null;
+    if (messageText != null && !messageText.isEmpty()) {
+      nextKeyboard = menuConfig.getKeyboard(messageText);
     }
-    return currentKeyboard;
+
+    if (nextKeyboard != null) {
+      userKeyboardInfo.setCurrentKeyboard(messageText);
+      if (currentKeyboard!= null && !messageText.equals(currentKeyboard.getName())) {
+        userKeyboardInfo.getPreviousKeyboards().add(currentKeyboard.getName());
+      }
+
+      userKeyboardService.updateUserKeyboardInfo(userKeyboardInfo);
+    }
+
+    return nextKeyboard;
   }
 
   private String getSendText(String messageText) {
@@ -159,7 +207,7 @@ public class ProductChatBot extends TelegramLongPollingBot {
     if (sendText != null) {
       sendMessage = new SendMessage(chatId, sendText);
     } else {
-      sendMessage = new SendMessage(chatId, defaultAnswer);
+      sendMessage = new SendMessage(chatId, botSettings.getDefaultAnswer());
     }
     sendMessage.enableMarkdown(true);
 

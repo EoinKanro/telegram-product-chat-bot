@@ -1,7 +1,7 @@
 package io.github.eoinkanro.telegram.product.chat.bot.core.conf;
 
 import io.github.eoinkanro.telegram.product.chat.bot.core.model.data.ConfigPaths;
-import io.github.eoinkanro.telegram.product.chat.bot.core.model.data.cache.UserKeyboard;
+import io.github.eoinkanro.telegram.product.chat.bot.core.model.data.cache.UserKeyboardInfo;
 import io.github.eoinkanro.telegram.product.chat.bot.core.service.UserKeyboardService;
 import io.github.eoinkanro.telegram.product.chat.bot.core.utils.FileUtils;
 import java.time.Duration;
@@ -32,9 +32,9 @@ public class CacheConfig {
 
   @Bean(destroyMethod = "close")
   public CacheManager ehcacheManagerBean(FileUtils fileUtils) {
-    CacheConfiguration<String, UserKeyboard> cacheConfig = CacheConfigurationBuilder
+    CacheConfiguration<String, UserKeyboardInfo> cacheConfig = CacheConfigurationBuilder
         .newCacheConfigurationBuilder(String.class,
-            UserKeyboard.class,
+            UserKeyboardInfo.class,
             ResourcePoolsBuilder.newResourcePoolsBuilder()
                 .heap(cacheDataSize, MemoryUnit.MB)
                 //TODO for statistics
