@@ -39,6 +39,11 @@
             <artifactId>telegrambots</artifactId>
             <version>6.1.0</version>
         </dependency>
+        <dependency>
+            <groupId>org.apache.opennlp</groupId>
+            <artifactId>opennlp-tools</artifactId>
+            <version>2.0.0</version>
+        </dependency>
 
         <dependency>
             <groupId>org.projectlombok</groupId>
@@ -71,7 +76,7 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
                     <fork>true</fork>
-                    <mainClass>io.github.eoinkanro.telegram.product.chat.bot.core.TelegramProductChatBot</mainClass>
+                    <mainClass>io.github.eoinkanro.telegram.info.chat.bot.core.TelegramProductChatBot</mainClass>
                     <excludes>
                         <exclude>
                             <groupId>org.projectlombok</groupId>
