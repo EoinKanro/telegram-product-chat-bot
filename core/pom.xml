@@ -10,7 +10,7 @@
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
-    <groupId>io.github.eoinkanro.telegram.product.chat.bot</groupId>
+    <groupId>io.github.eoinkanro.telegram.info.chat.bot</groupId>
     <artifactId>core</artifactId>
     <version>0.0.1</version>
     <packaging>jar</packaging>
