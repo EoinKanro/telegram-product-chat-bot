@@ -16,6 +16,11 @@ const routes = [
     { path: loginPath, component: LoginPage}
 ]
 
+const routesPaths = []
+routes.forEach(route => {
+    routesPaths.push(route.path)
+})
+
 const router = VueRouter.createRouter({
     history: VueRouter.createWebHashHistory(),
     routes
@@ -42,10 +47,8 @@ function checkAuth(to) {
     if (to.path !== loginPath && !authOk) {
         router.replace({path: loginPath})
     }
-
-    if (to.path === loginPath && authOk) {
+    if (to.path === loginPath && authOk || !routesPaths.includes(to.path)) {
         router.replace({path: homePath})
-
     }
 }
 

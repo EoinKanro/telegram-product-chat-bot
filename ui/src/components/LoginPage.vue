@@ -1,29 +1,40 @@
 <template>
-  <div class="container">
-    <div class="card card-container">
-      <img id="profile-img" class="profile-img-card" :src="avatarPhoto" />
-      <p id="profile-name" class="profile-name-card"></p>
-      <form @submit="savePassword" class="form-signin">
-        <input v-model="tempLogin" type="text" id="inputEmail" class="form-control" placeholder="Login" required autofocus>
-        <input v-model="tempPassword" type="password" id="inputPassword" class="form-control" placeholder="Password" required>
-        <button class="btn btn-lg btn-primary btn-block btn-signin" type="submit">Sign in</button>
-      </form>
+  <section class="position-relative py-4 py-xl-5">
+    <div class="container">
+      <div class="row mb-5">
+        <div class="col-md-8 col-xl-6 text-center mx-auto">
+          <h2>Telegram Info Chat Bot</h2>
+          <p class="w-lg-50"></p>
+        </div>
+      </div>
+      <div class="row d-flex justify-content-center">
+        <div class="col-md-6 col-xl-4">
+          <div class="card mb-5">
+            <div class="card-body d-flex flex-column align-items-center">
+              <div class="bs-icon-xl bs-icon-circle bs-icon-primary bs-icon my-4"><svg class="bi bi-person" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16">
+                <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10z"></path>
+              </svg></div>
+              <form @submit="savePassword" class="text-center">
+                <div class="mb-3"><input v-model="tempLogin" class="form-control" type="text" placeholder="Username" required autofocus/></div>
+                <div class="mb-3"><input  v-model="tempPassword" class="form-control" type="password" placeholder="Password" required/></div>
+                <div class="mb-3"><button class="btn btn-primary d-block w-100" type="submit">Login</button></div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-  </div>
+  </section>
 
 </template>
 
 <script>
-import avatarPhoto from "../assets/images/avatar.png"
-
 export default {
   name: "LoginPage",
   data() {
     return {
       tempLogin: '',
-      tempPassword: '',
-      bodyBackgroundClass: 'login-body',
-      avatarPhoto
+      tempPassword: ''
     }
   },
   methods: {
@@ -53,99 +64,64 @@ function checkToken() {
 
 
 <style scoped>
-
-.card-container.card {
-  max-width: 350px;
-  padding: 40px 40px;
+.bs-icon {
+  --bs-icon-size: .75rem;
+  display: flex;
+  flex-shrink: 0;
+  justify-content: center;
+  align-items: center;
+  font-size: var(--bs-icon-size);
+  width: calc(var(--bs-icon-size) * 2);
+  height: calc(var(--bs-icon-size) * 2);
+  color: var(--bs-primary);
 }
 
-.btn {
-  font-weight: 700;
-  height: 36px;
-  -moz-user-select: none;
-  -webkit-user-select: none;
-  user-select: none;
-  cursor: default;
+.bs-icon-xs {
+  --bs-icon-size: 1rem;
+  width: calc(var(--bs-icon-size) * 1.5);
+  height: calc(var(--bs-icon-size) * 1.5);
 }
 
-/*
- * Card component
- */
-.card {
-  background-color: rgba(63, 58, 58, 0.65);
-  padding: 20px 25px 30px;
-  margin: 0 auto 25px;
-  margin-top: 50px;
-  border-width: 0px;
+.bs-icon-sm {
+  --bs-icon-size: 1rem;
 }
 
-.profile-img-card {
-  width: 96px;
-  height: 96px;
-  margin: 0 auto 10px;
-  display: block;
-  -moz-border-radius: 50%;
-  -webkit-border-radius: 50%;
+.bs-icon-md {
+  --bs-icon-size: 1.5rem;
+}
+
+.bs-icon-lg {
+  --bs-icon-size: 2rem;
+}
+
+.bs-icon-xl {
+  --bs-icon-size: 2.5rem;
+}
+
+.bs-icon.bs-icon-primary {
+  color: var(--bs-white);
+  background: var(--bs-primary);
+}
+
+.bs-icon.bs-icon-primary-light {
+  color: var(--bs-primary);
+  background: rgba(var(--bs-primary-rgb), .2);
+}
+
+.bs-icon.bs-icon-semi-white {
+  color: var(--bs-primary);
+  background: rgba(255, 255, 255, .5);
+}
+
+.bs-icon.bs-icon-rounded {
+  border-radius: .5rem;
+}
+
+.bs-icon.bs-icon-circle {
   border-radius: 50%;
 }
 
-/*
- * Form styles
- */
-.profile-name-card {
-  font-size: 16px;
-  font-weight: bold;
-  text-align: center;
-  margin: 10px 0 0;
-  min-height: 1em;
-}
-
-.form-signin #inputEmail,
-.form-signin #inputPassword {
-  direction: ltr;
-  height: 44px;
-  font-size: 16px;
-}
-
-.form-signin input[type=password],
-.form-signin input[type=text],
-.form-signin button {
-  width: 100%;
-  display: block;
-  margin-bottom: 10px;
-  z-index: 1;
-  position: relative;
-  -moz-box-sizing: border-box;
-  -webkit-box-sizing: border-box;
-  box-sizing: border-box;
-}
-
-.form-signin .form-control:focus {
-  border-color: rgb(104, 145, 162);
-  outline: 0;
-  -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgb(104, 145, 162);
-  box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgb(104, 145, 162);
-}
-
-.btn.btn-signin {
-  background-color: rgba(47, 42, 42, 0.6);
-  padding: 0px;
-  font-weight: 700;
-  font-size: 14px;
-  height: 36px;
-  -moz-border-radius: 3px;
-  -webkit-border-radius: 3px;
-  border-radius: 3px;
-  border: none;
-  -o-transition: all 0.218s;
-  -moz-transition: all 0.218s;
-  -webkit-transition: all 0.218s;
-  transition: all 0.218s;
-}
-
-.btn.btn-signin:hover,
-.btn.btn-signin:active,
-.btn.btn-signin:focus {
-  background-color: rgba(76, 96, 68, 0.6)
+.card-body {
+  background: rgba(228,228,228,0.32);
 }
 </style>
