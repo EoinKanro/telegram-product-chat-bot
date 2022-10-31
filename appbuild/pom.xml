@@ -14,7 +14,7 @@
     <dependencies>
         <dependency>
             <groupId>io.github.eoinkanro.telegram.info.chat.bot</groupId>
-            <artifactId>core</artifactId>
+            <artifactId>api</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
@@ -33,7 +33,7 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
                     <fork>true</fork>
-                    <mainClass>io.github.eoinkanro.telegram.info.chat.bot.core.TelegramProductChatBot</mainClass>
+                    <mainClass>io.github.eoinkanro.telegram.info.chat.bot.core.TelegramInfoChatBot</mainClass>
                     <excludes>
                         <exclude>
                             <groupId>org.projectlombok</groupId>

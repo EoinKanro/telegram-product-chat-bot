@@ -6,20 +6,12 @@ import "bootstrap"
 
 import App from './App.vue'
 import HomePage from './components/HomePage.vue'
-import LoginPage from './components/LoginPage.vue'
 
 const homePath = '/'
-const loginPath = '/login'
 
 const routes = [
-    { path: homePath, component: HomePage},
-    { path: loginPath, component: LoginPage}
+    { path: homePath, component: HomePage}
 ]
-
-const routesPaths = []
-routes.forEach(route => {
-    routesPaths.push(route.path)
-})
 
 const router = VueRouter.createRouter({
     history: VueRouter.createWebHashHistory(),
@@ -30,28 +22,7 @@ createApp(App)
     .use(router)
     .mount('#app')
 
-router.beforeEach( (to) => {
-    checkAuth(to)
-    setBackground(to)
-})
-
-/**
- * Check is auth ok
- * If false - show login form
- *
- * @param to - router to
- */
-function checkAuth(to) {
-    let authOk = LoginPage.methods.checkAuth()
-
-    if (to.path !== loginPath && !authOk) {
-        router.replace({path: loginPath})
-    }
-    if (to.path === loginPath && authOk || !routesPaths.includes(to.path)) {
-        router.replace({path: homePath})
-    }
-}
-
+//TODO
 /**
  * Set background to template from App.vue styles
  *

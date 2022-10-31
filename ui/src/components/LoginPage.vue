@@ -29,6 +29,7 @@
 </template>
 
 <script>
+
 export default {
   name: "LoginPage",
   data() {
@@ -38,30 +39,69 @@ export default {
     }
   },
   methods: {
-    checkAuth() {
+    async checkAuth() {
       if (!sessionStorage.getItem(loginKey) || !sessionStorage.getItem(passwordKey)) {
         return false
       }
-       return checkToken()
+      return await this.checkToken()
     },
     savePassword() {
       sessionStorage.setItem(loginKey, this.tempLogin)
-      sessionStorage.setItem(passwordKey, this.tempPassword)
+      sessionStorage.setItem(passwordKey, btoa(this.tempPassword))
       this.tempLogin = ''
       this.tempPassword = ''
+      setTimeout(() => window.location.reload())
+    },
+    async checkToken() {
+      if (!sessionStorage.getItem(tokenKey)) {
+        return await this.login()
+      } else {
+        if (!await this.checkTokenRequest()) {
+          return await this.login()
+        } else {
+          return true
+        }
+      }
+    },
+    async login() {
+      let url = 'http://' + this.getCurrentHost() + '/api/auth/login'
+      let headers = new Headers();
+      headers.set("Username", sessionStorage.getItem(loginKey))
+      headers.set("Password", sessionStorage.getItem(passwordKey))
+
+      let response = await fetch(url, {method: 'POST', headers: headers})
+      let result = false
+      if (response.status === 200) {
+        sessionStorage.setItem(tokenKey, await response.text())
+        result = true
+      } else if(response.status === 401) {
+        alert("Wrong password or username")
+      } else {
+        this.alertError()
+      }
+    },
+    async checkTokenRequest() {
+      let url = 'http://' + this.getCurrentHost() + '/api/auth/checkToken'
+
+      let response = await fetch(url, {method: 'POST', body: sessionStorage.getItem(tokenKey)})
+      if (response.status !== 200) {
+        this.alertError()
+      }
+      return response.status === 200
+    },
+    getCurrentHost() {
+      return window.location.host
+    },
+    alertError() {
+      alert("Something went wrong")
     }
   }
 }
 
 const loginKey = 'login'
 const passwordKey = 'password'
-
-function checkToken() {
-  return true
-}
-
+const tokenKey = 'token'
 </script>
-
 
 <style scoped>
 .bs-icon {
