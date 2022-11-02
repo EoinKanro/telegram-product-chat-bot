@@ -79,6 +79,7 @@ export default {
       } else {
         this.alertError()
       }
+      return result
     },
     async checkTokenRequest() {
       let url = 'http://' + this.getCurrentHost() + '/api/auth/checkToken'
