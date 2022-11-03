@@ -1,10 +1,10 @@
 <template>
   <div class="btn-container btn-container-first">
-    <button class="btn btn-primary btn-first" type="button">Settings</button>
-    <button class="btn btn-primary btn-first" type="button">Data</button>
+    <button class="btn btn-primary btn-first" type="button" @click="$router.push($settingsPath)">Settings</button>
+    <button class="btn btn-primary btn-first" type="button" @click="$router.push($dataPath)">Data</button>
   </div>
   <div class="btn-container">
-    <button class="btn btn-primary btn-second" type="button">Utils</button>
+    <button class="btn btn-primary btn-second" type="button" @click="$router.push($utilsPath)">Utils</button>
   </div>
   <div class="style-slash-first"></div>
   <div class="style-slash-second"></div>

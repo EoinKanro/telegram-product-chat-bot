@@ -4,13 +4,22 @@ import * as VueRouter from 'vue-router'
 import "bootstrap/dist/css/bootstrap.min.css"
 import "bootstrap"
 
-import App from './App.vue'
-import HomePage from './components/HomePage.vue'
+import App from '@/App.vue'
+import HomePage from '@/components/HomePage.vue'
+import SettingsPage from "@/components/SettingsPage";
+import DataPage from "@/components/DataPage";
+import UtilsPage from "@/components/UtilsPage";
 
 const homePath = '/'
+const settingsPath = '/settings'
+const dataPath = '/data'
+const utilsPath = '/utils'
 
 const routes = [
-    { path: homePath, component: HomePage}
+    { path: homePath, component: HomePage},
+    { path: settingsPath, component: SettingsPage},
+    { path: dataPath, component: DataPage},
+    { path: utilsPath, component: UtilsPage}
 ]
 
 const router = VueRouter.createRouter({
@@ -18,9 +27,15 @@ const router = VueRouter.createRouter({
     routes
 })
 
-createApp(App)
-    .use(router)
+const app = createApp(App)
+
+app.use(router)
     .mount('#app')
+
+app.config.globalProperties.$homePath = homePath
+app.config.globalProperties.$settingsPath = settingsPath
+app.config.globalProperties.$dataPath = dataPath
+app.config.globalProperties.$utilsPath = utilsPath
 
 //TODO
 /**
