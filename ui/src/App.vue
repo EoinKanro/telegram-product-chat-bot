@@ -27,5 +27,10 @@ export default {
 </script>
 
 <style>
-
+.tab {
+  min-width: 600px;
+}
+.nav-tab {
+  min-width: 600px;
+}
 </style>

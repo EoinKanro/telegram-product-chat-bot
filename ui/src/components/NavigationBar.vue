@@ -1,5 +1,5 @@
 <template>
-  <nav class="navbar navbar-dark navbar-expand-md bg-dark py-3">
+  <nav class="navbar navbar-dark navbar-expand-md bg-dark py-3 nav-tab">
     <div class="container">
       <a class="navbar-brand d-flex align-items-center" href="#">
         <span class="bs-icon-sm bs-icon-rounded bs-icon-primary d-flex justify-content-center align-items-center me-2 bs-icon">
@@ -10,7 +10,7 @@
         </span>
         <span>TIF</span>
       </a>
-      <div id="navcol-1" class="collapse navbar-collapse">
+      <div id="navcol-1" class="navbar-collapse">
         <ul class="navbar-nav me-auto">
           <li class="nav-item"><a class="nav-link" :class="{'active': isCurrentLinkEquals($settingsPath)}" :href="'#'+$settingsPath">Settings</a></li>
           <li class="nav-item"><a class="nav-link" :class="{'active': isCurrentLinkEquals($dataPath)}" :href="'#'+$dataPath">Data</a></li>
@@ -55,26 +55,8 @@ const tokenKey = 'token'
   color: var(--bs-primary);
 }
 
-.bs-icon-xs {
-  --bs-icon-size: 1rem;
-  width: calc(var(--bs-icon-size) * 1.5);
-  height: calc(var(--bs-icon-size) * 1.5);
-}
-
 .bs-icon-sm {
   --bs-icon-size: 1rem;
-}
-
-.bs-icon-md {
-  --bs-icon-size: 1.5rem;
-}
-
-.bs-icon-lg {
-  --bs-icon-size: 2rem;
-}
-
-.bs-icon-xl {
-  --bs-icon-size: 2.5rem;
 }
 
 .bs-icon.bs-icon-primary {
@@ -82,21 +64,8 @@ const tokenKey = 'token'
   background: var(--bs-primary);
 }
 
-.bs-icon.bs-icon-primary-light {
-  color: var(--bs-primary);
-  background: rgba(var(--bs-primary-rgb), .2);
-}
-
-.bs-icon.bs-icon-semi-white {
-  color: var(--bs-primary);
-  background: rgba(255, 255, 255, .5);
-}
-
 .bs-icon.bs-icon-rounded {
   border-radius: .5rem;
 }
 
-.bs-icon.bs-icon-circle {
-  border-radius: 50%;
-}
 </style>
