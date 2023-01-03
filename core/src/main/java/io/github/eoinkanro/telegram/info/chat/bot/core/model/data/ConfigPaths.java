@@ -7,7 +7,7 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum ConfigPaths {
 
-  CONFIG_FOLDER("conf"),
+  CONFIG_FOLDER("config"),
   CACHE_FOLDER("cache"),
   IMAGE_FOLDER("img"),
   OPENNLP_FOLDER("nlp"),
