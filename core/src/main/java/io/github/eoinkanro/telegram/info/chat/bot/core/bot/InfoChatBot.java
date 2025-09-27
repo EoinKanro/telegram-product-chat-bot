@@ -1,4 +1,4 @@
-package io.github.eoinkanro.telegram.info.chat.bot.core.api;
+package io.github.eoinkanro.telegram.info.chat.bot.core.bot;
 
 import io.github.eoinkanro.telegram.info.chat.bot.core.conf.BotSettings;
 import io.github.eoinkanro.telegram.info.chat.bot.core.conf.MenuConfig;
